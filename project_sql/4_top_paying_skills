@@ -1,0 +1,22 @@
+/*
+Identify top paying skills for Data Scientist roles based on average salary
+Why? This analysis provides insights into which skills are associated with higher salaries for Data Scientist positions, helping job seekers prioritize skill development for better compensation
+*/
+
+-- Calculates the average salary for job postings by individual skill 
+SELECT
+  skills_dim.skills AS skill, 
+  ROUND(AVG(job_postings_fact.salary_year_avg)) AS avg_salary
+FROM
+  job_postings_fact
+	INNER JOIN
+	  skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
+	INNER JOIN
+	  skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
+WHERE
+  job_postings_fact.job_title = 'Data Scientist' 
+  AND job_postings_fact.salary_year_avg IS NOT NULL 
+GROUP BY
+  skills_dim.skills 
+ORDER BY
+  avg_salary DESC; 
