@@ -174,7 +174,66 @@ Here's the breakdown of the most demanded skills for data science in 2023:
 
 *Table of the demand for the top 5 skills in data science job postings base on top paying job*
 
+### 4. Skills Based on Salary
+Exploring the average salaries associated with different skills revealed which skills are the highest paying.
 
+```sql
+-- Calculates the average salary for job postings by individual skill 
+SELECT
+  skills_dim.skills AS skill, 
+  ROUND(AVG(job_postings_fact.salary_year_avg)) AS avg_salary
+FROM
+  job_postings_fact
+	INNER JOIN
+	  skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
+	INNER JOIN
+	  skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
+WHERE
+  job_postings_fact.job_title = 'Data Scientist' 
+  AND job_postings_fact.salary_year_avg IS NOT NULL 
+GROUP BY
+  skills_dim.skills 
+ORDER BY
+  avg_salary DESC
+LIMIT 15;
+```
+Here's a breakdown of the results for top paying skills for Data Science:
+- These findings suggest that specialized, modern, and less common tools tend to command the highest salaries in data science. 
+- Professionals combining core data analysis (Python, SQL) with advanced or niche systems (Neo4j, RShiny, Hugging Face) can position themselves at the top of the salary range.
+
+| Skills      | Average Salary ($) |
+|-------------|-------------------:|
+| neo4j       |             215,616|
+| airtable    |             215,500|
+| watson      |             214,250|
+| rshiny      |             205,357|
+| zoom        |             190,000|
+| solidity    |             170,500|
+| lua         |             170,500|
+| clojure     |             170,500|
+| objective-c |             164,500|
+| node        |             157,500|
+| cassandra   |             156,364|
+| assembly    |             154,107|
+| macos       |             152,250|
+| ms access   |             150,794|
+| huggingface |             150,000|
+
+*Table of the average salary for the top 15 paying skills for data science*
 
 # What I Learned
+- **Complex Query Crafting:** Mastered the art of advanced SQL, merging tables like a pro and wielding WITH clauses for ninja-level temp table maneuvers.
+- **Data Aggregation:** Got cozy with GROUP BY and turned aggregate functions like COUNT() and AVG() into my data-summarizing sidekicks.
+- **Analytical Wizardry:** Leveled up my real-world puzzle-solving skills, turning questions into actionable, insightful SQL queries.
+  
 # Conclusions
+
+### Insights
+- Specialized tools command premium salaries — niche technologies like Neo4j, RShiny, and Watson show that mastering less common, high-impact tools pays significantly more than general skills.
+
+- AI and machine learning integration is driving top salaries — platforms like Watson and Hugging Face highlight how demand for AI-driven data solutions is shaping the modern data science landscape.
+
+- Data scientists with software engineering crossover skills earn more — high-paying skills like Solidity, Objective-C, and Clojure indicate that blending data science with programming or blockchain expertise increases market value.
+
+### Closing Thoughts
+This project enhanced my SQL skills and provided valuable insights into the data science job market. The findings from the analysis serve as a guide to prioritizing skill development and job search efforts. Aspiring data sciencetists can better position themselves in a competitive job market by focusing on high-demand, high-salary skills. This exploration highlights the importance of continuous learning and adaptation to emerging trends in the field of data analytics.
