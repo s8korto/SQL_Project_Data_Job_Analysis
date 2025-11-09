@@ -16,9 +16,10 @@ LEFT JOIN company_dim
     ON job_postings_fact.company_id = company_dim.company_id
 WHERE 
     job_postings_fact.salary_year_avg IS NOT NULL 
-    AND job_postings_fact.job_title = 'Data Scientist'
+    AND job_postings_fact.job_title_short = 'Data Scientist'
 ORDER BY 
     job_postings_fact.salary_year_avg DESC
+LIMIT 15
 ), 
 
 -- List skills associated with these top paying jobs
@@ -47,4 +48,4 @@ FROM
 GROUP BY 
     skills_dim.skills
 ORDER BY 
-    demand_count DESC
+    demand_count DESC;
