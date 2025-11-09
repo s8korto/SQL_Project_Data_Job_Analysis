@@ -26,6 +26,7 @@ Each query for this project aimed at investigating specific aspects of the data 
 ### 1. Top Paying Data Science Jobs
 To identify the highest-paying roles, I filtered data science positions by average yearly salary and location. This query highlights the high paying opportunities in the field.
 ```sql
+--- Calculate top paying Data Scientist jobs with respective skills companies are looking for
 SELECT 
     job_postings_fact.job_id,
     company_dim.name AS company_name,
@@ -55,6 +56,7 @@ Here's the breakdown of the top data science jobs in 2023:
 ### 2. Skills for Top Paying Jobs
 To understand what skills are required for the top-paying jobs, I joined the job postings with the skills data, providing insights into what employers value for high-compensation roles.
 ```sql
+-- Calculate top paying Data Scientist jobs with respective skills companies are looking for
 WITH top_paying_jobs AS (
 SELECT 
     job_postings_fact.job_id,
@@ -103,6 +105,74 @@ Here's the breakdown of the most demanded skills for the highest paying data sci
 | AWS        | Cloud Computing   |
 
 *Table showcasing vauable skills in demand for data science base on sql query*
+
+### 3. In-Demand Skills for Data Science
+
+This query helped identify the skills most frequently requested in job postings, directing focus to areas with high demand.
+
+```sql
+-- Calculate top paying Data Scientist jobs with respective skills companies are looking for 
+WITH top_paying_jobs AS (
+SELECT 
+    job_postings_fact.job_id,
+    company_dim.name AS company_name,
+    job_postings_fact.job_title,
+    job_postings_fact.salary_year_avg
+FROM 
+    job_postings_fact
+LEFT JOIN company_dim 
+    ON job_postings_fact.company_id = company_dim.company_id
+WHERE 
+    job_postings_fact.salary_year_avg IS NOT NULL 
+    AND job_postings_fact.job_title_short = 'Data Scientist'
+ORDER BY 
+    job_postings_fact.salary_year_avg DESC
+LIMIT 15
+), 
+
+-- List skills associated with these top paying jobs
+skills_dim AS 
+(
+SELECT 
+    top_paying_jobs.job_id,
+    top_paying_jobs.company_name,
+    top_paying_jobs.job_title,
+    skills_dim.skills
+FROM   
+    top_paying_jobs
+LEFT JOIN skills_job_dim
+    ON top_paying_jobs.job_id = skills_job_dim.job_id
+LEFT JOIN skills_dim
+    ON skills_job_dim.skill_id = skills_dim.skill_id
+ORDER BY 
+    salary_year_avg DESC
+)
+-- Count the demand for each skill in these top paying Data Scientist jobs
+SELECT 
+    skills_dim.skills,
+    COUNT(skills_dim.skills) AS demand_count 
+FROM 
+    skills_dim
+GROUP BY 
+    skills_dim.skills
+ORDER BY 
+    demand_count DESC;
+```
+Here's the breakdown of the most demanded skills for data science in 2023:
+- Python leads by a significant margin, emphasizing its versatility and dominance in modern data workflows.
+- SQL is close behind, reinforcing that database querying is a must-have core skill.
+- R remains relevant but trails Python as industries shift to more flexible open-source ecosystems.
+- SAS and Excel show continued but declining demand — valuable in certain roles but less critical for advanced analytics.
+
+| Skills   | Demand Count |
+|----------|--------------|
+| Python   | 11           |
+| R        | 9            |
+| SQL      | 7            |
+| Excel    | 4            |
+| sas      | 4            |
+
+*Table of the demand for the top 5 skills in data science job postings base on top paying job*
 
 
 
