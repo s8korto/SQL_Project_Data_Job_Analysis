@@ -52,6 +52,58 @@ Here's the breakdown of the top data science jobs in 2023:
 ![Top Paying Roles](assets/top_paying_job.png)
 *Bar graph visualizing the salary for the top 15 salaries for data science; ChatGPT generated this graph from my SQL query results*
 
+### 2. Skills for Top Paying Jobs
+To understand what skills are required for the top-paying jobs, I joined the job postings with the skills data, providing insights into what employers value for high-compensation roles.
+```sql
+WITH top_paying_jobs AS (
+SELECT 
+    job_postings_fact.job_id,
+    company_dim.name AS company_name,
+    job_postings_fact.job_title,
+    job_postings_fact.salary_year_avg
+FROM 
+    job_postings_fact
+LEFT JOIN company_dim 
+    ON job_postings_fact.company_id = company_dim.company_id
+WHERE 
+    job_postings_fact.salary_year_avg IS NOT NULL 
+    AND job_postings_fact.job_title_short = 'Data Scientist'
+ORDER BY 
+    job_postings_fact.salary_year_avg DESC
+LIMIT 15
+)
+-- List skills associated with these top paying jobs
+SELECT 
+    top_paying_jobs.job_id,
+    top_paying_jobs.company_name,
+    top_paying_jobs.job_title,
+    skills_dim.skills
+FROM   
+    top_paying_jobs
+LEFT JOIN skills_job_dim
+    ON top_paying_jobs.job_id = skills_job_dim.job_id
+LEFT JOIN skills_dim
+    ON skills_job_dim.skill_id = skills_dim.skill_id
+ORDER BY 
+    salary_year_avg DESC;
+```
+Here's the breakdown of the most demanded skills for the highest paying data science jobs in 2023:
+
+- The dominance of Python and SQL indicates that strong proficiency in data manipulation, analysis, and querying remains fundamental for most data science roles.
+- The high demand for AWS shows that organizations increasingly rely on cloud-based data infrastructure for storage, model deployment, and analytics pipelines.
+- Employers seek professionals who can collect, process, analyze, and deploy models — skills that Python, SQL, and AWS together enable efficiently.
+
+| **Skill** | **Description**    |
+|------------|-------------------|
+| Python     | Programming       |
+| R          | Data Analysis     |
+| Excel      | Data Analysis     |
+| SQL        | Database Querying |
+| Spark      | Big Data          |
+| AWS        | Cloud Computing   |
+
+*Table showcasing vauable skills in demand for data science base on sql query*
+
 
 
 # What I Learned
