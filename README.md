@@ -14,6 +14,12 @@ The questions I wanted to answer through my SQL queries were:
 4. Which skills are associated with higher salaries?
    
 # Tools I Used
+In this project, I utilized a variety of tools to conduct my analysis:
+
+- **SQL** (Structured Query Language): Enabled me to interact with the database, extract insights, and answer my key questions through queries.
+- **PostgreSQL**: As the database management system, PostgreSQL allowed me to store, query, and manipulate the job posting data.
+- **Visual Studio Code:** This open-source administration and development platform helped me manage the database and execute SQL queries.
+
 # The Analysis
 # What I Learned
 # Conclusions
